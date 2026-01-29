@@ -12,6 +12,9 @@ dependencies = [
 [project.scripts]
 calculator-api = "server:main"
 
+[tool.setuptools]
+py-modules = ["server", "core"]
+
 [tool.ruff]
 line-length = 100
 
