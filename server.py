@@ -1,22 +1,16 @@
 #!/usr/bin/env python3
 """A very simple calculator REST API server."""
 
-import sys
 from contextlib import asynccontextmanager
 from datetime import datetime
-from pathlib import Path
 from typing import AsyncGenerator
-
-# Add calculator-cli to path so we can import from it
-sys.path.insert(0, str(Path(__file__).parent.parent / "calculator-cli"))
 
 import uvicorn
 from fastapi import Depends, FastAPI, HTTPException
 from pydantic import BaseModel
 from sqlmodel import Field, Session, SQLModel, create_engine, select
 
-# Reuse calculator functions from calculator-cli
-from calculator import add, divide, multiply, subtract
+from core import add, divide, multiply, subtract
 
 # --- Database Setup ---
 
