@@ -91,6 +91,22 @@ OPERATIONS: dict[str, callable] = {  # type: ignore[type-arg]
 }
 
 
+# --- Health Check ---
+
+
+class HealthResponse(BaseModel):
+    """Response model for the health check endpoint."""
+
+    status: str
+    version: str
+
+
+@app.get("/health", response_model=HealthResponse)
+def health_check() -> HealthResponse:
+    """Return the health status of the service."""
+    return HealthResponse(status="ok", version=app.version)
+
+
 # --- Calculator Endpoints ---
 
 
