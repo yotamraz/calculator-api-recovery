@@ -2,7 +2,7 @@
 """A very simple calculator REST API server."""
 
 from contextlib import asynccontextmanager
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from typing import AsyncGenerator
 
 import uvicorn
@@ -55,7 +55,7 @@ class Calculation(CalculationBase, table=True):
     """Database model for stored calculations."""
 
     id: int | None = Field(default=None, primary_key=True)
-    created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 
 class CalculationCreate(BaseModel):
