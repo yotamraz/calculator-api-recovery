@@ -91,7 +91,8 @@ class ResultResponse(BaseModel):
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
-    """Create database tables on startup."""
+    """Drop and recreate database tables on startup for a clean state."""
+    SQLModel.metadata.drop_all(engine)
     SQLModel.metadata.create_all(engine)
     yield
 
