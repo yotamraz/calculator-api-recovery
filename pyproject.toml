@@ -2,11 +2,11 @@
 name = "calculator-api"
 version = "0.1.0"
 description = "A simple calculator REST API"
-requires-python = ">=3.12"
+requires-python = ">=3.10"
 dependencies = [
-    "fastapi>=0.129.0",
-    "uvicorn[standard]>=0.34.0",
-    "sqlmodel>=0.0.33",
+    "fastapi>=0.115.0",
+    "uvicorn>=0.32.0",
+    "sqlmodel>=0.0.22",
     "pydantic-settings>=2.0.0",
 ]
 
