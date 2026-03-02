@@ -86,6 +86,10 @@ replay_pid*
 *.out
 *.coverprofile
 
+# ----- SQLite databases -----
+*.db
+*.db-journal
+
 # ----- C# / .NET -----
 [Bb]in/
 [Oo]bj/
