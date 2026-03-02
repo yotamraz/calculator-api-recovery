@@ -9,7 +9,7 @@ This script supports two modes:
 1. SRC Validation: Tests endpoints and captures responses (no expected_response)
 2. DST Contract Validation: Tests endpoints and validates responses match expected (has expected_response)
 
-Generated at: 2026-03-02T08:33:10.949956+00:00
+Generated at: 2026-03-02T08:36:55.438572+00:00
 Project: calculator-api-recovery
 Milestone: 1
 """
@@ -215,12 +215,12 @@ TEST_CASES: list[dict[str, Any]] = resolve_env_placeholders(
         "category": "INVALID_TYPE",
         "endpoint": "/multiply",
         "method": "POST",
-        "description": "Send a boolean value instead of a number to verify type validation",
+        "description": "Send a string value instead of a number to verify type validation",
         "request_data": {
             "path": {},
             "query": {},
             "body": {
-                "a": true,
+                "a": "notanumber",
                 "b": 5.0
             }
         },
