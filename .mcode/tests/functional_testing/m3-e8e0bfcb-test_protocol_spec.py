@@ -9,7 +9,7 @@ This script supports two modes:
 1. SRC Validation: Tests endpoints and captures responses (no expected_response)
 2. DST Contract Validation: Tests endpoints and validates responses match expected (has expected_response)
 
-Generated at: 2026-03-02T08:43:52.079229+00:00
+Generated at: 2026-03-02T08:47:37.697071+00:00
 Project: calculator-api-recovery
 Milestone: 3
 """
@@ -52,28 +52,18 @@ TEST_CASES: list[dict[str, Any]] = resolve_env_placeholders(
     json.loads(r'''[
     {
         "name": "health_check_happy_path",
-        "category": "HAPPY_PATH",
         "endpoint": "/health",
         "method": "GET",
-        "description": "Verify the history service health endpoint returns ok status",
-        "request_data": {
-            "path": {},
-            "query": {},
-            "body": null
-        },
+        "request_data": {},
         "expected_status": 200,
-        "setup": null,
-        "cleanup": null
+        "category": "HAPPY_PATH",
+        "description": "Verify the history service health endpoint returns ok status"
     },
     {
         "name": "create_calculation_add_happy_path",
-        "category": "HAPPY_PATH",
         "endpoint": "/calculations",
         "method": "POST",
-        "description": "Create an addition calculation via the history service, which internally calls the arithmetic service",
         "request_data": {
-            "path": {},
-            "query": {},
             "body": {
                 "operation": "add",
                 "a": 5.0,
@@ -81,94 +71,74 @@ TEST_CASES: list[dict[str, Any]] = resolve_env_placeholders(
             }
         },
         "expected_status": 201,
-        "setup": null,
-        "cleanup": null
+        "category": "HAPPY_PATH",
+        "description": "Create an addition calculation via the history service, which internally calls the arithmetic service"
     },
     {
         "name": "create_calculation_subtract_happy_path",
-        "category": "HAPPY_PATH",
         "endpoint": "/calculations",
         "method": "POST",
-        "description": "Create a subtraction calculation to verify inter-service communication for subtract operation",
         "request_data": {
-            "path": {},
-            "query": {},
             "body": {
-                "operation": "subtract",
+                "operation": "sub",
                 "a": 10.0,
                 "b": 4.0
             }
         },
         "expected_status": 201,
-        "setup": null,
-        "cleanup": null
+        "category": "HAPPY_PATH",
+        "description": "Create a subtraction calculation to verify inter-service communication for subtract operation"
     },
     {
         "name": "create_calculation_multiply_happy_path",
-        "category": "HAPPY_PATH",
         "endpoint": "/calculations",
         "method": "POST",
-        "description": "Create a multiplication calculation to verify inter-service communication for multiply operation",
         "request_data": {
-            "path": {},
-            "query": {},
             "body": {
-                "operation": "multiply",
-                "a": 7.0,
-                "b": 6.0
+                "operation": "mul",
+                "a": 6.0,
+                "b": 7.0
             }
         },
         "expected_status": 201,
-        "setup": null,
-        "cleanup": null
+        "category": "HAPPY_PATH",
+        "description": "Create a multiplication calculation to verify inter-service communication for multiply operation"
     },
     {
         "name": "create_calculation_divide_happy_path",
-        "category": "HAPPY_PATH",
         "endpoint": "/calculations",
         "method": "POST",
-        "description": "Create a division calculation to verify inter-service communication for divide operation",
         "request_data": {
-            "path": {},
-            "query": {},
             "body": {
-                "operation": "divide",
+                "operation": "div",
                 "a": 20.0,
                 "b": 5.0
             }
         },
         "expected_status": 201,
-        "setup": null,
-        "cleanup": null
+        "category": "HAPPY_PATH",
+        "description": "Create a division calculation to verify inter-service communication for divide operation"
     },
     {
         "name": "create_calculation_divide_by_zero",
-        "category": "BOUNDARY",
         "endpoint": "/calculations",
         "method": "POST",
-        "description": "Attempt division by zero, expect 400 error propagated from arithmetic service",
         "request_data": {
-            "path": {},
-            "query": {},
             "body": {
-                "operation": "divide",
+                "operation": "div",
                 "a": 10.0,
                 "b": 0.0
             }
         },
         "expected_status": 400,
-        "setup": null,
-        "cleanup": null
+        "category": "BOUNDARY",
+        "description": "Attempt division by zero, expect 400 error propagated from arithmetic service"
     },
     {
         "name": "create_calculation_unknown_operation",
-        "category": "INVALID_INPUT",
         "endpoint": "/calculations",
         "method": "POST",
-        "description": "Attempt to create a calculation with an unsupported operation name",
         "request_data": {
-            "path": {},
-            "query": {},
             "body": {
                 "operation": "modulo",
                 "a": 10.0,
@@ -176,30 +146,22 @@ TEST_CASES: list[dict[str, Any]] = resolve_env_placeholders(
             }
         },
         "expected_status": 400,
-        "setup": null,
-        "cleanup": null
+        "category": "INVALID_INPUT",
+        "description": "Attempt to create a calculation with an unsupported operation name"
     },
     {
         "name": "list_calculations_happy_path",
-        "category": "HAPPY_PATH",
         "endpoint": "/calculations",
         "method": "GET",
-        "description": "List all stored calculations, returns an array",
-        "request_data": {
-            "path": {},
-            "query": {},
-            "body": null
-        },
+        "request_data": {},
         "expected_status": 200,
-        "setup": null,
-        "cleanup": null
+        "category": "HAPPY_PATH",
+        "description": "List all stored calculations, returns an array"
     },
     {
         "name": "get_calculation_by_id_happy_path",
-        "category": "HAPPY_PATH",
         "endpoint": "/calculations/{calculation_id}",
         "method": "GET",
-        "description": "Create a calculation, then retrieve it by ID to verify persistence",
         "setup": {
             "endpoint": "/calculations",
             "method": "POST",
@@ -213,11 +175,11 @@ TEST_CASES: list[dict[str, Any]] = resolve_env_placeholders(
         "request_data": {
             "path": {
                 "calculation_id": "$setup_id"
-            },
-            "query": {},
-            "body": null
+            }
         },
         "expected_status": 200,
+        "category": "HAPPY_PATH",
+        "description": "Create a calculation, then retrieve it by ID to verify persistence",
         "cleanup": {
             "endpoint": "/calculations/{calculation_id}",
             "method": "DELETE",
@@ -228,63 +190,52 @@ TEST_CASES: list[dict[str, Any]] = resolve_env_placeholders(
     },
     {
         "name": "get_calculation_not_found",
-        "category": "NOT_FOUND",
         "endpoint": "/calculations/{calculation_id}",
         "method": "GET",
-        "description": "Attempt to retrieve a calculation with a non-existent ID",
         "request_data": {
             "path": {
                 "calculation_id": 999999
-            },
-            "query": {},
-            "body": null
+            }
         },
         "expected_status": 404,
-        "setup": null,
-        "cleanup": null
+        "category": "NOT_FOUND",
+        "description": "Attempt to retrieve a calculation with a non-existent ID"
     },
     {
         "name": "delete_calculation_happy_path",
-        "category": "HAPPY_PATH",
         "endpoint": "/calculations/{calculation_id}",
         "method": "DELETE",
-        "description": "Create a calculation, then delete it to verify deletion works",
         "setup": {
             "endpoint": "/calculations",
             "method": "POST",
             "body": {
-                "operation": "multiply",
-                "a": 3.0,
-                "b": 9.0
+                "operation": "add",
+                "a": 100.0,
+                "b": 200.0
             },
             "extract_id_from": "id"
         },
         "request_data": {
             "path": {
                 "calculation_id": "$setup_id"
-            },
-            "query": {},
-            "body": null
+            }
         },
         "expected_status": 204,
-        "cleanup": null
+        "category": "HAPPY_PATH",
+        "description": "Create a calculation, then delete it to verify deletion works"
     },
     {
         "name": "delete_calculation_not_found",
-        "category": "NOT_FOUND",
         "endpoint": "/calculations/{calculation_id}",
         "method": "DELETE",
-        "description": "Attempt to delete a calculation with a non-existent ID",
         "request_data": {
             "path": {
                 "calculation_id": 999999
-            },
-            "query": {},
-            "body": null
+            }
         },
         "expected_status": 404,
-        "setup": null,
-        "cleanup": null
+        "category": "NOT_FOUND",
+        "description": "Attempt to delete a calculation with a non-existent ID"
     }
 ]''')
 )
