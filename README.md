@@ -1,87 +1,114 @@
-# Calculator API
+# Arithmetic Service
 
-A very simple REST API server that reuses functionality from `calculator-cli`.
+A lightweight Go service providing stateless arithmetic operations via a REST API. Built with [Gin](https://github.com/gin-gonic/gin) v1.10.
 
 ## Setup
 
+### Prerequisites
+
+- Go 1.23+
+
+### Install Dependencies
+
 ```bash
-pip install -e .
+go mod download
 ```
 
 ## Run
 
 ```bash
-python server.py
+go run .
 ```
 
-Or after installing:
+The server starts on `http://0.0.0.0:8080` by default.
+
+### Configuration
+
+Configuration is managed via environment variables:
+
+| Variable | Default   | Description          |
+|----------|-----------|----------------------|
+| `HOST`   | `0.0.0.0` | Server bind address  |
+| `PORT`   | `8080`    | Server listen port   |
+
+Copy `.env.example` to `.env` and modify as needed:
 
 ```bash
-calculator-api
+cp .env.example .env
 ```
 
-The server runs on `http://localhost:8000`.
+## API Endpoints
 
-## Endpoints
+### Health Check
 
-### Calculator Operations
+```
+GET /health
+```
 
-All calculator endpoints accept POST with JSON body `{"a": <number>, "b": <number>}`.
+Response:
+```json
+{"status": "ok", "version": "0.1.0"}
+```
 
-| Endpoint | Description |
-|----------|-------------|
-| `/add` | Add two numbers |
-| `/subtract` | Subtract b from a |
-| `/multiply` | Multiply two numbers |
-| `/divide` | Divide a by b |
+### Arithmetic Operations
 
-### Calculation History (CRUD)
+All arithmetic endpoints accept `POST` with JSON body `{"a": <number>, "b": <number>}` and return `{"result": <number>}`.
 
-Store calculations in a SQLite database.
+| Endpoint     | Description        |
+|--------------|--------------------|
+| `POST /add`      | Add two numbers    |
+| `POST /subtract` | Subtract b from a  |
+| `POST /multiply` | Multiply two numbers |
+| `POST /divide`   | Divide a by b      |
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/calculations` | Create & store a calculation |
-| GET | `/calculations` | List all stored calculations |
-| GET | `/calculations/{id}` | Get a specific calculation |
-| DELETE | `/calculations/{id}` | Delete a calculation |
+### Examples
 
-## Examples
-
-**Quick calculation:**
+**Addition:**
 
 ```bash
-curl -X POST http://localhost:8000/add \
+curl -X POST http://localhost:8080/add \
   -H "Content-Type: application/json" \
   -d '{"a": 5, "b": 3}'
 ```
 
-Response: `{"result": 8.0}`
+Response: `{"result": 8}`
 
-**Save a calculation to the database:**
+**Division:**
 
 ```bash
-curl -X POST http://localhost:8000/calculations \
+curl -X POST http://localhost:8080/divide \
   -H "Content-Type: application/json" \
-  -d '{"operation": "mul", "a": 7, "b": 6}'
+  -d '{"a": 10, "b": 3}'
 ```
 
-Response: `{"operation": "mul", "a": 7.0, "b": 6.0, "result": 42.0, "id": 1, "created_at": "..."}`
+Response: `{"result": 3.3333333333333335}`
 
-**List all saved calculations:**
+**Division by zero:**
 
 ```bash
-curl http://localhost:8000/calculations
+curl -X POST http://localhost:8080/divide \
+  -H "Content-Type: application/json" \
+  -d '{"a": 10, "b": 0}'
 ```
 
-**Delete a calculation:**
+Response (HTTP 400): `{"detail": "Cannot divide by zero"}`
+
+## Testing
+
+Run all tests:
 
 ```bash
-curl -X DELETE http://localhost:8000/calculations/1
+go test -v ./...
 ```
 
-## API Docs
+Run only unit tests:
 
-FastAPI auto-generates docs at:
-- Swagger UI: http://localhost:8000/docs
-- ReDoc: http://localhost:8000/redoc
+```bash
+go test -v -run "Test(Add|Subtract|Multiply|Divide)$" ./...
+```
+
+Run only HTTP integration tests:
+
+```bash
+go test -v -run "TestHandler" ./...
+```
