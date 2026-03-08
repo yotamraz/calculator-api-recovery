@@ -8,9 +8,11 @@ import (
 )
 
 // CalculationRequest represents the JSON request body for arithmetic endpoints.
+// Pointer types are used so that zero is a valid value while missing fields
+// are still rejected by Gin's binding:"required" validator.
 type CalculationRequest struct {
-	A float64 `json:"a" binding:"required"`
-	B float64 `json:"b" binding:"required"`
+	A *float64 `json:"a" binding:"required"`
+	B *float64 `json:"b" binding:"required"`
 }
 
 // ResultResponse represents the JSON response body for successful arithmetic operations.
@@ -67,7 +69,7 @@ func handleAdd(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, ErrorResponse{Detail: err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, ResultResponse{Result: Add(req.A, req.B)})
+	c.JSON(http.StatusOK, ResultResponse{Result: Add(*req.A, *req.B)})
 }
 
 // handleSubtract subtracts b from a.
@@ -77,7 +79,7 @@ func handleSubtract(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, ErrorResponse{Detail: err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, ResultResponse{Result: Subtract(req.A, req.B)})
+	c.JSON(http.StatusOK, ResultResponse{Result: Subtract(*req.A, *req.B)})
 }
 
 // handleMultiply multiplies two numbers.
@@ -87,7 +89,7 @@ func handleMultiply(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, ErrorResponse{Detail: err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, ResultResponse{Result: Multiply(req.A, req.B)})
+	c.JSON(http.StatusOK, ResultResponse{Result: Multiply(*req.A, *req.B)})
 }
 
 // handleDivide divides a by b.
@@ -98,7 +100,7 @@ func handleDivide(c *gin.Context) {
 		return
 	}
 
-	result, err := Divide(req.A, req.B)
+	result, err := Divide(*req.A, *req.B)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse{Detail: err.Error()})
 		return
