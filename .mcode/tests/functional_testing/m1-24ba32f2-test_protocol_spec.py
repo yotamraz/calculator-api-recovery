@@ -9,7 +9,7 @@ This script supports two modes:
 1. SRC Validation: Tests endpoints and captures responses (no expected_response)
 2. DST Contract Validation: Tests endpoints and validates responses match expected (has expected_response)
 
-Generated at: 2026-03-18T22:47:14.760966+00:00
+Generated at: 2026-03-18T22:49:04.955867+00:00
 Project: calculator-api-recovery
 Milestone: 1
 """
@@ -100,7 +100,7 @@ TEST_CASES: list[dict[str, Any]] = resolve_env_placeholders(
                 "a": 5.0
             }
         },
-        "expected_status": 400,
+        "expected_status": 422,
         "cleanup": null
     },
     {
@@ -154,7 +154,7 @@ TEST_CASES: list[dict[str, Any]] = resolve_env_placeholders(
                 "b": "five"
             }
         },
-        "expected_status": 400,
+        "expected_status": 422,
         "cleanup": null
     },
     {
@@ -205,7 +205,7 @@ TEST_CASES: list[dict[str, Any]] = resolve_env_placeholders(
             "query": {},
             "body": {}
         },
-        "expected_status": 400,
+        "expected_status": 422,
         "cleanup": null
     },
     {
